@@ -250,6 +250,45 @@ export type Database = {
         }
         Relationships: []
       }
+      presale_leads: {
+        Row: {
+          consent_privacy: boolean
+          created_at: string
+          email: string
+          first_name: string
+          honeypot: string
+          id: string
+          last_name: string
+          phone: string | null
+          privacy_version: string
+          profession: string
+        }
+        Insert: {
+          consent_privacy: boolean
+          created_at?: string
+          email: string
+          first_name: string
+          honeypot?: string
+          id?: string
+          last_name: string
+          phone?: string | null
+          privacy_version?: string
+          profession: string
+        }
+        Update: {
+          consent_privacy?: boolean
+          created_at?: string
+          email?: string
+          first_name?: string
+          honeypot?: string
+          id?: string
+          last_name?: string
+          phone?: string | null
+          privacy_version?: string
+          profession?: string
+        }
+        Relationships: []
+      }
       referral_codes: {
         Row: {
           code: string
@@ -312,11 +351,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      can_read_presale: { Args: never; Returns: boolean }
       issue_invoice: {
         Args: {
           p_cash_cents: number
