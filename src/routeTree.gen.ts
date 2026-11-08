@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as PrevenditaRouteImport } from './routes/prevendita'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedPazientiPatientIdRouteImport } from './routes/_authenticated/pazienti/$patientId'
 
@@ -21,6 +22,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrevenditaRoute = PrevenditaRouteImport.update({
+  id: '/prevendita',
+  path: '/prevendita',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
@@ -38,10 +44,12 @@ const AuthenticatedPazientiPatientIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/prevendita': typeof PrevenditaRoute
   '/pazienti/$patientId': typeof AuthenticatedPazientiPatientIdRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/prevendita': typeof PrevenditaRoute
   '/': typeof AuthenticatedIndexRoute
   '/pazienti/$patientId': typeof AuthenticatedPazientiPatientIdRoute
 }
@@ -49,18 +57,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/prevendita': typeof PrevenditaRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/pazienti/$patientId': typeof AuthenticatedPazientiPatientIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/pazienti/$patientId'
+  fullPaths: '/' | '/auth' | '/prevendita' | '/pazienti/$patientId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/' | '/pazienti/$patientId'
+  to: '/auth' | '/prevendita' | '/' | '/pazienti/$patientId'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/prevendita'
     | '/_authenticated/'
     | '/_authenticated/pazienti/$patientId'
   fileRoutesById: FileRoutesById
@@ -68,6 +78,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  PrevenditaRoute: typeof PrevenditaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -84,6 +95,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prevendita': {
+      id: '/prevendita'
+      path: '/prevendita'
+      fullPath: '/prevendita'
+      preLoaderRoute: typeof PrevenditaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/': {
@@ -119,6 +137,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  PrevenditaRoute: PrevenditaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
