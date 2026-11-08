@@ -82,10 +82,10 @@ export function contactedWithin(events: EventLite[], patientId: string, type: st
 }
 
 /** Has ≥1 non-cancelled appointment and none in the last 90 days (nor in the future). */
-export function isDormant(appts: ApptLite[], patientId: string, now = Date.now()) {
+export function isDormant(appts: ApptLite[], patientId: string, now = Date.now(), days = 90) {
   const mine = appts.filter((a) => a.patient_id === patientId && a.status !== "cancelled");
   if (mine.length === 0) return false;
-  return mine.every((a) => new Date(a.start_time).getTime() < now - 90 * DAY);
+  return mine.every((a) => new Date(a.start_time).getTime() < now - days * DAY);
 }
 
 export function hadRecentCompleted(appts: ApptLite[], patientId: string, now = Date.now()) {
