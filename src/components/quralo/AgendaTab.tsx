@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -9,71 +10,25 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { SERVICES, errorMessage, formatDateTimeIt, serviceLabel } from "@/lib/quralo";
+import { SERVICES } from "@/lib/quralo";
+import { localeFor } from "@/lib/i18n";
+import { AGENDA_SETTINGS, customMinutesSchema, downloadIcs, freeIntervals, localDate, weekBounds } from "@/lib/agenda";
 import { Empty, ErrorBox, Loading, PatientSelect, Section } from "./common";
-
-const STATUS: Record<string, string> = { scheduled: "Prenotato", completed: "Completato", cancelled: "Annullato", no_show: "Non presentato" };
-
 export function AgendaTab() {
-  const qc = useQueryClient();
-  const [history, setHistory] = useState(false);
-  const [pid, setPid] = useState(""); const [svc, setSvc] = useState<string>(SERVICES[0].id);
-  const [date, setDate] = useState(""); const [time, setTime] = useState("");
-  const [saving, setSaving] = useState(false);
-  const q = useQuery({ queryKey: ["appointments", "list", history], queryFn: async () => {
-    let r = supabase.from("appointments").select("*, patients(first_name,last_name)").order("start_time");
-    if (!history) { const d = new Date(); d.setHours(0, 0, 0, 0); r = r.gte("start_time", d.toISOString()); }
-    const { data, error } = await r; if (error) throw error; return data;
-  } });
-  async function book(e: FormEvent) {
-    e.preventDefault();
-    if (!pid || !date || !time) return toast.error("Scegli paziente, data e ora.");
-    const s = SERVICES.find((x) => x.id === svc)!;
-    const start = new Date(`${date}T${time}`); const end = new Date(start.getTime() + s.minutes * 60000);
-    setSaving(true);
-    try {
-      const { data: clash, error: ce } = await supabase.from("appointments").select("id").neq("status", "cancelled").lt("start_time", end.toISOString()).gt("end_time", start.toISOString()).limit(1);
-      if (ce) throw ce;
-      if (clash.length) { toast.error("In quell'orario hai gia' un appuntamento: scegli un altro orario."); return; }
-      const { error } = await supabase.from("appointments").insert({ patient_id: pid, service_type: s.id, start_time: start.toISOString(), end_time: end.toISOString() });
-      if (error) throw error;
-      toast.success("Appuntamento prenotato."); setTime(""); qc.invalidateQueries({ queryKey: ["appointments"] });
-    } catch (err) { toast.error(errorMessage(err)); } finally { setSaving(false); }
-  }
-  async function setStatus(id: string, status: string) {
-    const { error } = await supabase.from("appointments").update({ status }).eq("id", id);
-    if (error) return toast.error(errorMessage(error));
-    toast.success(`Segnato come ${STATUS[status].toLowerCase()}.`); qc.invalidateQueries({ queryKey: ["appointments"] });
-  }
-  return (
-    <div className="grid gap-4 lg:grid-cols-[380px_1fr]">
-      <Section title="Prenota">
-        <form onSubmit={book} className="space-y-3">
-          <PatientSelect value={pid} onChange={setPid} />
-          <Select value={svc} onValueChange={setSvc}><SelectTrigger className="h-11 w-full" aria-label="Servizio"><SelectValue /></SelectTrigger>
-            <SelectContent>{SERVICES.map((s) => <SelectItem key={s.id} value={s.id}>{s.label} · {s.minutes} min</SelectItem>)}</SelectContent></Select>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5"><Label htmlFor="d">Data</Label><Input id="d" type="date" className="h-11" value={date} onChange={(e) => setDate(e.target.value)} /></div>
-            <div className="space-y-1.5"><Label htmlFor="t">Ora</Label><Input id="t" type="time" step={300} className="h-11" value={time} onChange={(e) => setTime(e.target.value)} /></div>
-          </div>
-          <Button type="submit" className="h-11 w-full" disabled={saving}>{saving && <Loader2 className="animate-spin" />}Prenota</Button>
-        </form>
-      </Section>
-      <Section title="Appuntamenti" action={<label className="flex items-center gap-2 text-sm"><Checkbox checked={history} onCheckedChange={(v) => setHistory(v === true)} />Mostra anche lo storico</label>}>
-        {q.isLoading ? <Loading /> : q.isError ? <ErrorBox error={q.error} onRetry={() => q.refetch()} /> : !q.data?.length ? <Empty>Nessun appuntamento.</Empty> : (
-          <ul className="space-y-2">{q.data.map((a) => (
-            <li key={a.id} className="rounded-lg border p-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div><p className="font-medium">{a.patients ? `${a.patients.first_name} ${a.patients.last_name}` : ""}</p>
-                  <p className="text-sm text-muted-foreground">{formatDateTimeIt(a.start_time)} · {serviceLabel(a.service_type)}</p></div>
-                <Badge variant={a.status === "scheduled" ? "default" : "outline"}>{STATUS[a.status]}</Badge>
-              </div>
-              {a.status === "scheduled" && <div className="mt-2 flex flex-wrap gap-2">
-                <Button size="sm" className="h-9" onClick={() => setStatus(a.id, "completed")}>Completato</Button>
-                <Button size="sm" variant="outline" className="h-9" onClick={() => setStatus(a.id, "no_show")}>Non presentato</Button>
-                <Button size="sm" variant="ghost" className="h-9 text-destructive" onClick={() => setStatus(a.id, "cancelled")}>Annulla</Button></div>}
-            </li>))}</ul>)}
-      </Section>
-    </div>
-  );
+ const {t,i18n}=useTranslation();const locale=localeFor(i18n.language);const qc=useQueryClient();
+ const [history,setHistory]=useState(false),[pid,setPid]=useState(""),[svc,setSvc]=useState<string>(SERVICES[0].id),[minutes,setMinutes]=useState(30),[date,setDate]=useState(()=>localDate(new Date())),[time,setTime]=useState(""),[saving,setSaving]=useState(false);
+ const q=useQuery({queryKey:["appointments","list"],queryFn:async()=>{const {data,error}=await supabase.from("appointments").select("*, patients(first_name,last_name)").order("start_time");if(error)throw error;return data;}});
+ const duration=svc==="custom"?minutes:SERVICES.find(s=>s.id===svc)?.minutes;
+ const bounds=weekBounds(date); const appointments=q.data??[];
+ const weekly=appointments.filter(a=>new Date(a.start_time)>=bounds.start&&new Date(a.start_time)<bounds.end);
+ const listed=history?appointments:weekly;
+ const slots=freeIntervals(date,appointments).filter(s=>duration&&s.end-s.start>=duration*60000);
+ const fmtTime=(d:number)=>new Intl.DateTimeFormat(locale,{hour:"2-digit",minute:"2-digit"}).format(d);
+ const event=(a:typeof appointments[number])=>({id:a.id,start_time:a.start_time,end_time:a.end_time,patientName:a.patients?`${a.patients.first_name} ${a.patients.last_name}`:"",service:t(`services.${a.service_type??"custom"}`)});
+ async function book(e:FormEvent){e.preventDefault();if(!pid||!date||!time||!duration||!Number.isFinite(new Date(`${date}T${time}`).getTime()))return toast.error(t("agenda.invalid"));if(svc==="custom"&&!customMinutesSchema.safeParse(duration).success)return toast.error(t("agenda.durationError"));
+ const start=new Date(`${date}T${time}`),end=new Date(start.getTime()+duration*60000);setSaving(true);try{const {data:clash,error:ce}=await supabase.from("appointments").select("id").neq("status","cancelled").lt("start_time",end.toISOString()).gt("end_time",start.toISOString()).limit(1);if(ce)throw ce;if(clash?.length)return toast.error(t("agenda.clash"));const {error}=await supabase.from("appointments").insert({patient_id:pid,service_type:svc,start_time:start.toISOString(),end_time:end.toISOString()});if(error)throw error;toast.success(t("agenda.saved"));setTime("");await qc.invalidateQueries({queryKey:["appointments"]});}catch{toast.error(t("common.error"));}finally{setSaving(false);}}
+ async function setStatus(id:string,status:string){const {error}=await supabase.from("appointments").update({status}).eq("id",id);if(error)return toast.error(t("common.error"));toast.success(t("agenda.updated"));await qc.invalidateQueries({queryKey:["appointments"]});}
+ function shift(days:number){const d=new Date(`${date}T12:00:00`);d.setDate(d.getDate()+days);setDate(localDate(d));}
+ return <div className="grid gap-4 lg:grid-cols-[360px_1fr]"><div className="space-y-4"><Section title={t("agenda.book")}><form onSubmit={book} className="space-y-3"><PatientSelect value={pid} onChange={setPid}/><Label>{t("agenda.service")}</Label><Select value={svc} onValueChange={setSvc}><SelectTrigger className="h-11 w-full" aria-label={t("agenda.service")}><SelectValue/></SelectTrigger><SelectContent>{[...SERVICES.map(s=>s.id),"custom"].map(id=><SelectItem key={id} value={id}>{t(`services.${id}`)}</SelectItem>)}</SelectContent></Select>{svc==="custom"&&<div className="space-y-1.5"><Label htmlFor="duration">{t("agenda.duration")}</Label><Input id="duration" type="number" min={10} max={240} step={5} required value={minutes} onChange={e=>setMinutes(Number(e.target.value))}/></div>}<div className="grid grid-cols-2 gap-3"><div><Label htmlFor="d">{t("agenda.date")}</Label><Input id="d" type="date" required className="h-11" value={date} onChange={e=>{if(e.target.value)setDate(e.target.value);}}/></div><div><Label htmlFor="t">{t("agenda.time")}</Label><Input id="t" type="time" required step={300} className="h-11" value={time} onChange={e=>setTime(e.target.value)}/></div></div><Button className="h-11 w-full" disabled={saving||q.isError||q.isLoading}>{saving&&<Loader2 className="animate-spin"/>}{t("agenda.book")}</Button></form></Section><Section title={t("agenda.free")} description={`${AGENDA_SETTINGS.start}–${AGENDA_SETTINGS.end}`}>
+ {q.isLoading?<Loading/>:q.isError?<ErrorBox error={q.error} onRetry={()=>q.refetch()}/>:!slots.length?<Empty>{t("agenda.noSlots")}</Empty>:<div className="flex flex-wrap gap-2">{slots.map(s=><Button key={s.start} variant="outline" className="h-11" onClick={()=>{setDate(localDate(new Date(s.start)));const d=new Date(s.start);setTime(`${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`);}}>{fmtTime(s.start)}–{fmtTime(s.end)}</Button>)}</div>}</Section></div><Section title={t("agenda.appointments")}><div className="mb-4 flex flex-wrap items-center gap-2"><Button size="icon" variant="outline" aria-label={t("agenda.previous")} onClick={()=>shift(-7)}><ChevronLeft/></Button><span className="text-sm">{new Intl.DateTimeFormat(locale,{day:"numeric",month:"short"}).format(bounds.start)} – {new Intl.DateTimeFormat(locale,{day:"numeric",month:"short",year:"numeric"}).format(new Date(bounds.end.getTime()-1))}</span><Button size="icon" variant="outline" aria-label={t("agenda.next")} onClick={()=>shift(7)}><ChevronRight/></Button><Button variant="outline" disabled={!weekly.some(a=>a.status!=="cancelled")} onClick={()=>downloadIcs(weekly.filter(a=>a.status!=="cancelled").map(event),"quralo-week.ics")}><Download/>{t("agenda.exportWeek")}</Button></div><label className="mb-4 flex items-center gap-2 text-sm"><Checkbox checked={history} onCheckedChange={v=>setHistory(v===true)}/>{t("agenda.history")}</label>{q.isLoading?<Loading/>:q.isError?<ErrorBox error={q.error} onRetry={()=>q.refetch()}/>:!listed.length?<Empty>{t("agenda.empty")}</Empty>:<ul className="space-y-3">{listed.map(a=><li key={a.id} className="rounded-lg border p-3"><div className="flex flex-wrap justify-between gap-2"><div><p className="font-medium">{a.patients?`${a.patients.first_name} ${a.patients.last_name}`:""}</p><p className="text-sm text-muted-foreground">{new Intl.DateTimeFormat(locale,{dateStyle:"short",timeStyle:"short"}).format(new Date(a.start_time))} · {t(`services.${a.service_type??"custom"}`)} · {t("agenda.minutes",{count:(new Date(a.end_time).getTime()-new Date(a.start_time).getTime())/60000})}</p></div><Badge variant={a.status==="scheduled"?"default":"outline"}>{t(`agenda.${a.status}`)}</Badge></div><div className="mt-3 flex flex-wrap gap-2">{a.status==="scheduled"&&["completed","no_show","cancelled"].map(s=><Button key={s} size="sm" variant="outline" onClick={()=>setStatus(a.id,s)}>{t(`agenda.${s}`)}</Button>)}<Button className="h-auto min-h-9 whitespace-normal text-left" size="sm" variant="ghost" onClick={()=>downloadIcs([event(a)],`quralo-${a.id}.ics`)}><Download className="shrink-0"/>{t("agenda.export")}</Button></div></li>)}</ul>}</Section></div>;
 }
