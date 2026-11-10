@@ -1,14 +1,29 @@
+# Search and answer crawlers: public pages only
 User-agent: Googlebot
-Allow: /
-
 User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: PerplexityBot
+User-agent: Claude-SearchBot
+Allow: /$
+Allow: /prevendita
+Allow: /auth
+Allow: /llms.txt
+Disallow: /app
+Disallow: /pazienti/
 
 User-agent: *
-Allow: /
+Allow: /$
+Allow: /prevendita
+Allow: /auth
+Disallow: /app
+Disallow: /pazienti/
+
+# Training crawlers: your decision. Uncomment to block.
+# User-agent: GPTBot
+# User-agent: ClaudeBot
+# User-agent: Google-Extended
+# User-agent: CCBot
+# Disallow: /
+
+Sitemap: https://quralo-care-studio.lovable.app/sitemap.xml

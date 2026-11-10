@@ -16,7 +16,11 @@ export const Route = createFileRoute("/auth")({
     if (data.user) throw redirect({ to: "/app" });
   },
   head: () => ({
+    links: [{ rel: "canonical", href: "https://quralo-care-studio.lovable.app/auth" }],
     meta: [
+      { property: "og:url", content: "https://quralo-care-studio.lovable.app/auth" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Accedi — Quralo" },
       { name: "description", content: "Accedi a Quralo, il motore di acquisizione e fidelizzazione per terapisti manuali." },
       { property: "og:title", content: "Accedi — Quralo" },
