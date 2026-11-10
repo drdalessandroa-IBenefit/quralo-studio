@@ -18,13 +18,14 @@
   },
   "nav": {
     "pazienti": "Patients",
-    "cartella": "Clinical record",
-    "agenda": "Schedule",
-    "fatture": "Invoices and TS",
-    "growth": "Follow-up",
+    "cartella": "Clinical records",
+    "agenda": "Calendar",
+    "fatture": "Invoices",
+    "growth": "Growth engine",
     "studio": "Practice",
     "leads": "Presale leads",
-    "exit": "Sign out"
+    "exit": "Sign out",
+    "oggi": "Today"
   },
   "services": {
     "prima_visita": "First visit",
@@ -130,5 +131,19 @@
     "yes": "Yes",
     "no": "No",
     "absent": "Patient not found."
+  },
+  "today": {
+    "title": "Today",
+    "appointments": "Today's appointments",
+    "reactivate": "Patients to reactivate",
+    "reviews": "Review requests ready",
+    "agenda": "Today's schedule",
+    "noAppts": "No appointments today.",
+    "opportunities": "Opportunity: reactivate patients",
+    "noDormant": "No consenting patients to reactivate.",
+    "write": "Write",
+    "seeAll": "See all",
+    "lastVisit": "Last visit {{count}} days ago",
+    "preview": "Message preview"
   }
 }

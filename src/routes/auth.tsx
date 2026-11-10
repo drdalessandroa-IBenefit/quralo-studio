@@ -13,7 +13,7 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getUser();
-    if (data.user) throw redirect({ to: "/" });
+    if (data.user) throw redirect({ to: "/app" });
   },
   head: () => ({
     meta: [
@@ -39,14 +39,14 @@ function AuthPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) { setError(errorMessage(error)); return; }
-    navigate({ to: "/" });
+    navigate({ to: "/app" });
   }
   async function signup(e: FormEvent) {
     e.preventDefault(); setLoading(true); setError(null);
     const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
     setLoading(false);
     if (error) { setError(errorMessage(error)); return; }
-    if (data.session) navigate({ to: "/" }); else setSent(true);
+    if (data.session) navigate({ to: "/app" }); else setSent(true);
   }
 
   const fields = (
