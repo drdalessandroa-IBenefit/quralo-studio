@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PrevenditaRouteImport } from './routes/prevendita'
-import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedPazientiPatientIdRouteImport } from './routes/_authenticated/pazienti/$patientId'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -29,9 +35,9 @@ const PrevenditaRoute = PrevenditaRouteImport.update({
   path: '/prevendita',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPazientiPatientIdRoute =
@@ -42,40 +48,45 @@ const AuthenticatedPazientiPatientIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedIndexRoute
+  '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/prevendita': typeof PrevenditaRoute
+  '/app': typeof AuthenticatedAppRoute
   '/pazienti/$patientId': typeof AuthenticatedPazientiPatientIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/prevendita': typeof PrevenditaRoute
-  '/': typeof AuthenticatedIndexRoute
+  '/app': typeof AuthenticatedAppRoute
   '/pazienti/$patientId': typeof AuthenticatedPazientiPatientIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/prevendita': typeof PrevenditaRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/pazienti/$patientId': typeof AuthenticatedPazientiPatientIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/prevendita' | '/pazienti/$patientId'
+  fullPaths: '/' | '/auth' | '/prevendita' | '/app' | '/pazienti/$patientId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/prevendita' | '/' | '/pazienti/$patientId'
+  to: '/' | '/auth' | '/prevendita' | '/app' | '/pazienti/$patientId'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
     | '/auth'
     | '/prevendita'
-    | '/_authenticated/'
+    | '/_authenticated/app'
     | '/_authenticated/pazienti/$patientId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   PrevenditaRoute: typeof PrevenditaRoute
@@ -83,6 +94,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -104,11 +122,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrevenditaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/': {
-      id: '/_authenticated/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+    '/_authenticated/app': {
+      id: '/_authenticated/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/pazienti/$patientId': {
@@ -122,12 +140,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedPazientiPatientIdRoute: typeof AuthenticatedPazientiPatientIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAppRoute: AuthenticatedAppRoute,
   AuthenticatedPazientiPatientIdRoute: AuthenticatedPazientiPatientIdRoute,
 }
 
@@ -135,6 +153,7 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   PrevenditaRoute: PrevenditaRoute,

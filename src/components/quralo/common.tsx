@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -8,9 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { errorMessage } from "@/lib/quralo";
 import { patientsQuery, fullName } from "@/lib/queries";
 
-export function Loading({ label }: { label?: string }) {
+export function Loading({ label, rows = 3 }: { label?: string; rows?: number }) {
   const { t } = useTranslation();
-  return <div className="flex items-center justify-center gap-2 py-10 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{label ?? t("common.loading")}</div>;
+  return (
+    <div role="status" aria-live="polite" className="space-y-2 py-2">
+      <span className="sr-only">{label ?? t("common.loading")}</span>
+      {Array.from({ length: rows }, (_, i) => <Skeleton key={i} className="h-14 w-full rounded-lg bg-soft" />)}
+    </div>
+  );
 }
 
 export function ErrorBox({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
@@ -28,7 +34,7 @@ export function ErrorBox({ error, onRetry }: { error: unknown; onRetry?: () => v
 
 export function Section({ title, description, action, children }: { title: string; description?: string; action?: ReactNode; children: ReactNode }) {
   return (
-    <section className="rounded-xl border bg-card p-4 shadow-card sm:p-5">
+    <section className="rounded-lg border bg-card p-4 shadow-card sm:p-5">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div><h2 className="text-lg font-semibold tracking-tight">{title}</h2>
           {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}</div>

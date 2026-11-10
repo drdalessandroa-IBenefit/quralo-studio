@@ -18,13 +18,14 @@
   },
   "nav": {
     "pazienti": "Pazienti",
-    "cartella": "Cartella",
+    "cartella": "Cartella clinica",
     "agenda": "Agenda",
     "fatture": "Fatture e TS",
-    "growth": "Follow up",
+    "growth": "Growth engine",
     "studio": "Studio",
     "leads": "Lead prevendita",
-    "exit": "Esci"
+    "exit": "Esci",
+    "oggi": "Oggi"
   },
   "services": {
     "prima_visita": "Prima visita",
@@ -130,5 +131,19 @@
     "yes": "Sì",
     "no": "No",
     "absent": "Paziente non trovato."
+  },
+  "today": {
+    "title": "Oggi",
+    "appointments": "Appuntamenti di oggi",
+    "reactivate": "Pazienti da riattivare",
+    "reviews": "Richieste di recensione pronte",
+    "agenda": "Agenda di oggi",
+    "noAppts": "Nessun appuntamento oggi.",
+    "opportunities": "Opportunità: riattiva i pazienti",
+    "noDormant": "Nessun paziente da riattivare con consenso.",
+    "write": "Scrivi",
+    "seeAll": "Vedi tutti",
+    "lastVisit": "Ultima visita {{count}} giorni fa",
+    "preview": "Anteprima messaggio"
   }
 }
