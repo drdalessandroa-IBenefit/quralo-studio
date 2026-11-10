@@ -21,7 +21,7 @@ export const profileQuery = queryOptions({
   queryFn: async () => {
     const { data: u, error: ue } = await supabase.auth.getUser();
     if (ue || !u.user) throw ue ?? new Error("Sessione scaduta");
-    return run(supabase.from("therapist_profiles").select("*").eq("id", u.user.id).maybeSingle());
+    return run<Profile | null>(supabase.from("therapist_profiles").select("*").eq("id", u.user.id).maybeSingle());
   },
 });
 
