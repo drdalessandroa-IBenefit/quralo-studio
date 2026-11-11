@@ -1,0 +1,16 @@
+import { useState,type FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useTranslation } from "react-i18next";
+import { CheckCircle2,Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select,SelectContent,SelectItem,SelectTrigger,SelectValue } from "@/components/ui/select";
+import { presaleSchema } from "@/lib/presale";
+import { submitPresale } from "@/lib/presale.functions";
+export function PresaleForm(){const {t}=useTranslation();const submit=useServerFn(submitPresale);const [f,setF]=useState({first_name:"",last_name:"",email:"",phone:"",profession:"osteopath",consent_privacy:false,honeypot:""});const [saving,setSaving]=useState(false),[success,setSuccess]=useState(false),[error,setError]=useState("");
+ async function send(e:FormEvent){e.preventDefault();setError("");const parsed=presaleSchema.safeParse(f);if(!parsed.success){setError(t("presale.invalid"));return;}setSaving(true);try{await submit({data:parsed.data});setSuccess(true);}catch{setError(t("common.error"));}finally{setSaving(false);}}
+ if(success)return <div role="status" className="py-10"><CheckCircle2 className="mb-4 size-10 text-success"/><h2 className="text-xl font-semibold">{t("presale.success")}</h2></div>;
+ return <form onSubmit={send} className="space-y-4"><h2 className="text-xl font-semibold">{t("presale.interest")}</h2><div className="grid gap-4 sm:grid-cols-2">{(["first_name","last_name","email","phone"] as const).map(k=><div key={k} className="space-y-1.5"><Label htmlFor={`lead-${k}`}>{t(`presale.${{first_name:"first",last_name:"last",email:"email",phone:"phone"}[k]}`)}</Label><Input id={`lead-${k}`} type={k==="email"?"email":k==="phone"?"tel":"text"} autoComplete={{first_name:"given-name",last_name:"family-name",email:"email",phone:"tel"}[k]} required={k!=="phone"} maxLength={k==="email"?255:k==="phone"?30:100} className="h-11" value={f[k]} onChange={e=>setF({...f,[k]:e.target.value})}/></div>)}</div><div className="space-y-1.5"><Label>{t("presale.profession")}</Label><Select value={f.profession} onValueChange={profession=>setF({...f,profession})}><SelectTrigger className="h-11 w-full" aria-label={t("presale.profession")}><SelectValue/></SelectTrigger><SelectContent>{["osteopath","kinesiologist","physiotherapist","other"].map(p=><SelectItem key={p} value={p}>{t(`presale.${p}`)}</SelectItem>)}</SelectContent></Select></div><div className="sr-only" aria-hidden="true"><Label htmlFor="lead-website">{t("presale.trap")}</Label><Input id="lead-website" tabIndex={-1} autoComplete="off" value={f.honeypot} onChange={e=>setF({...f,honeypot:e.target.value})}/></div><p className="text-xs leading-relaxed text-muted-foreground">{t("presale.privacyInfo")}</p><label className="flex items-start gap-3 text-sm leading-relaxed"><Checkbox className="mt-1 shrink-0" checked={f.consent_privacy} onCheckedChange={v=>setF({...f,consent_privacy:v===true})}/>{t("presale.privacy")}</label>{error&&<p role="alert" className="text-sm text-destructive">{error}</p>}<Button className="h-11 w-full sm:w-auto" disabled={saving}>{saving&&<Loader2 className="animate-spin"/>}{t("presale.submit")}</Button></form>;
+}
