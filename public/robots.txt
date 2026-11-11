@@ -26,4 +26,4 @@ Disallow: /pazienti/
 # User-agent: CCBot
 # Disallow: /
 
-Sitemap: https://quralo-care-studio.lovable.app/sitemap.xml
+Sitemap: https://careconnect.app/sitemap.xml

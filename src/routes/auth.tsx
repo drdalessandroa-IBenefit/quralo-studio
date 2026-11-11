@@ -16,9 +16,9 @@ export const Route = createFileRoute("/auth")({
     if (data.user) throw redirect({ to: "/app" });
   },
   head: () => ({
-    links: [{ rel: "canonical", href: "https://quralo-care-studio.lovable.app/auth" }],
+    links: [{ rel: "canonical", href: "https://careconnect.app/auth" }],
     meta: [
-      { property: "og:url", content: "https://quralo-care-studio.lovable.app/auth" },
+      { property: "og:url", content: "https://careconnect.app/auth" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { title: "Accedi — CareConnect" },

@@ -3,7 +3,7 @@ import practice from "@/assets/quralo-practice.webp";
 import { HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const URL = "https://quralo-care-studio.lovable.app";
+const URL = "https://careconnect.app";
 const TITLE = "CareConnect — Gestionale per osteopati e fisioterapisti";
 const DESC = "Gestionale per osteopati, chinesiologi e fisioterapisti: agenda, cartella clinica, consenso GDPR firmato e riattivazione pazienti.";
 const FAQ = [
