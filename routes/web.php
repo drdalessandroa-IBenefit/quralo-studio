@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SignatureController;
@@ -29,6 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('patients', PatientController::class)->only(['index', 'store', 'show']);
     Route::post('/patients/{patient}/signature', [SignatureController::class, 'store'])->name('patients.signature.store');
     Route::get('/patients/{patient}/signature', [SignatureController::class, 'show'])->name('patients.signature.show');
+    Route::get('/agenda', [AppointmentController::class, 'index'])->name('agenda.index');
+    Route::post('/agenda', [AppointmentController::class, 'store'])->name('agenda.store');
+    Route::get('/agenda/export.ics', [AppointmentController::class, 'export'])->name('agenda.export');
+    Route::get('/agenda/{appointment}/ics', [AppointmentController::class, 'exportOne'])->name('agenda.ics');
+    Route::patch('/agenda/{appointment}/status', [AppointmentController::class, 'status'])->name('agenda.status');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
