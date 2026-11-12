@@ -145,5 +145,16 @@
     "seeAll": "Vedi tutti",
     "lastVisit": "Ultima visita {{count}} giorni fa",
     "preview": "Anteprima messaggio"
+  },
+  "studio": {
+    "title": "Studio",
+    "description": "Dati del professionista usati in fatture, export e messaggi.",
+    "fullName": "Nome e cognome",
+    "studioName": "Nome dello studio",
+    "fiscalCode": "Codice fiscale professionista",
+    "vatNumber": "Partita IVA (11 cifre)",
+    "googleUrl": "Link recensioni Google (https://...)",
+    "save": "Salva profilo",
+    "saved": "Profilo salvato."
   }
 }

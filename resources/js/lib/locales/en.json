@@ -145,5 +145,16 @@
     "seeAll": "See all",
     "lastVisit": "Last visit {{count}} days ago",
     "preview": "Message preview"
+  },
+  "studio": {
+    "title": "Studio",
+    "description": "Professional details used in invoices, exports and messages.",
+    "fullName": "Full name",
+    "studioName": "Studio name",
+    "fiscalCode": "Professional fiscal code",
+    "vatNumber": "VAT number (11 digits)",
+    "googleUrl": "Google reviews link (https://...)",
+    "save": "Save profile",
+    "saved": "Profile saved."
   }
 }
