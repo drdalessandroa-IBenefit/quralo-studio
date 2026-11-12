@@ -5,25 +5,24 @@ use App\Http\Controllers\ClinicalNoteController;
 use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PresaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StudioController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\TodayController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', fn () => Inertia::render('Welcome', [
+    'canLogin' => Route::has('login'),
+    'canRegister' => Route::has('register'),
+]));
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Public presale landing + lead capture (no auth).
+Route::get('/prevendita', [PresaleController::class, 'show'])->name('prevendita.show');
+Route::post('/prevendita', [PresaleController::class, 'store'])->middleware('throttle:10,1')->name('prevendita.store');
+
+Route::get('/app', [TodayController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
