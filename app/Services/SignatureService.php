@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Exceptions\SignatureAlreadyRecorded;
 use App\Models\Patient;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use RuntimeException;
 use Throwable;
 
 class SignatureService
@@ -21,7 +21,8 @@ class SignatureService
 
         // Immutable proof: never overwrite an existing object.
         if ($disk->exists($path)) {
-            throw new RuntimeException('Signature path already exists.');
+            // Same-millisecond collision means a concurrent signer already wrote it: refuse, never overwrite.
+            throw new SignatureAlreadyRecorded;
         }
         $disk->put($path, $image->get());
 
@@ -48,13 +49,5 @@ class SignatureService
         }
 
         return $patient->refresh();
-    }
-}
-
-class SignatureAlreadyRecorded extends RuntimeException
-{
-    public function __construct()
-    {
-        parent::__construct('Signature already recorded.');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\SignatureAlreadyRecorded;
 use App\Models\Patient;
-use App\Services\SignatureAlreadyRecorded;
 use App\Services\SignatureService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;

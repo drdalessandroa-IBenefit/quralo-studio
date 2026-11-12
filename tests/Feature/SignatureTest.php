@@ -127,7 +127,7 @@ it('closes the race: a stale unsigned copy cannot overwrite an existing signatur
     $date = $p->consent_date;
 
     expect(fn () => $service->store($stale, sigPng(), false))
-        ->toThrow(App\Services\SignatureAlreadyRecorded::class);
+        ->toThrow(App\Exceptions\SignatureAlreadyRecorded::class);
 
     $p->refresh();
     expect($p->signature_path)->toBe($first);
