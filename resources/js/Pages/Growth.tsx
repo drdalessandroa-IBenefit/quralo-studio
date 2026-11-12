@@ -73,17 +73,20 @@ function MessageRow({
     const [edited, setEdited] = useState<string | null>(null);
     const message = edited ?? fill(template, { ...vars, nome: row.first_name });
 
+    const [blockedUrl, setBlockedUrl] = useState<string | null>(null);
+
     const open = () => {
-        const w = window.open(
-            `https://wa.me/${row.phone}?text=${encodeURIComponent(message)}`,
-            '_blank',
-            'noopener',
-        );
-        if (!w) return alert(t('growth.popup'));
+        const url = `https://wa.me/${row.phone}?text=${encodeURIComponent(message)}`;
+        // Open synchronously from the click gesture. No 'noopener' feature
+        // (it always returns null); harden via opener = null instead.
+        const w = window.open(url, '_blank');
+        if (w) w.opener = null;
+        else setBlockedUrl(url);
+        // Always log: the therapist's click is the intent to contact.
         router.post(
             '/growth/events',
             { patient_id: row.id, type },
-            { preserveScroll: true },
+            { preserveScroll: true, preserveState: true },
         );
     };
 
@@ -111,6 +114,19 @@ function MessageRow({
                 <MessageCircle className="mr-2 h-4 w-4" />
                 {t('growth.open')}
             </Button>
+            {blockedUrl && (
+                <p className="mt-2 text-sm">
+                    {t('growth.popup')}{' '}
+                    <a
+                        href={blockedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                    >
+                        wa.me
+                    </a>
+                </p>
+            )}
         </article>
     );
 }
@@ -292,7 +308,7 @@ export default function Growth(p: Props) {
                         ) : (
                             p.campaign.map((r) => (
                                 <MessageRow
-                                    key={`${r.id}-${template}`}
+                                    key={r.id}
                                     row={r}
                                     type="campaign"
                                     template={template}
