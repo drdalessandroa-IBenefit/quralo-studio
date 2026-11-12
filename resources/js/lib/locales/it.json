@@ -216,5 +216,29 @@
     "history": "Storico note",
     "all": "Tutti i pazienti",
     "empty": "Nessuna nota."
+  },
+  "invoices": {
+    "title": "Fatture e TS",
+    "new": "Emetti fattura",
+    "patient": "Paziente",
+    "total": "Importo totale (€)",
+    "cash": "Contanti (€)",
+    "pos": "POS (€, calcolato)",
+    "noCf": "Emetti senza CF valido",
+    "cfBlocked": "Il paziente non ha un codice fiscale valido: spunta \"Emetti senza CF valido\" per procedere.",
+    "stamp": "Importo oltre 77,47 €: è dovuta la marca da bollo da 2 €.",
+    "issue": "Emetti",
+    "history": "Fatture emesse",
+    "empty": "Nessuna fattura.",
+    "number": "Numero",
+    "date": "Data",
+    "stampYes": "Bollo",
+    "incoherent": "Importi non coerenti.",
+    "issueOnly": "Le fatture non si modificano né si eliminano.",
+    "export": "Export CSV mensile",
+    "month": "Mese",
+    "download": "Scarica CSV",
+    "exportNote": "Non è il tracciato XML ufficiale del Sistema TS: è un CSV di supporto per il commercialista.",
+    "needProfCf": "Imposta il codice fiscale del professionista nello Studio per abilitare l'export."
   }
 }

@@ -216,5 +216,29 @@
     "history": "Note history",
     "all": "All patients",
     "empty": "No notes."
+  },
+  "invoices": {
+    "title": "Invoices & TS",
+    "new": "Issue invoice",
+    "patient": "Patient",
+    "total": "Total amount (€)",
+    "cash": "Cash (€)",
+    "pos": "POS (€, computed)",
+    "noCf": "Issue without valid fiscal code",
+    "cfBlocked": "The patient has no valid fiscal code: tick \"Issue without valid fiscal code\" to proceed.",
+    "stamp": "Amount above €77.47: a €2 stamp duty is due.",
+    "issue": "Issue",
+    "history": "Issued invoices",
+    "empty": "No invoices.",
+    "number": "Number",
+    "date": "Date",
+    "stampYes": "Stamp",
+    "incoherent": "Amounts are inconsistent.",
+    "issueOnly": "Invoices cannot be edited or deleted.",
+    "export": "Monthly CSV export",
+    "month": "Month",
+    "download": "Download CSV",
+    "exportNote": "This is NOT the official Sistema TS XML layout: it is a support CSV for your accountant.",
+    "needProfCf": "Set the professional's fiscal code in Studio to enable export."
   }
 }

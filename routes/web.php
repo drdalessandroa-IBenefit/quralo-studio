@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ClinicalNoteController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SignatureController;
@@ -40,6 +41,12 @@ Route::middleware('auth')->group(function () {
     // Append-only record: modification verbs are explicitly refused (no controller action exists).
     Route::match(['put', 'patch', 'delete'], '/clinical-notes/{note}', fn () => abort(405, 'Method Not Allowed'))
         ->setBindingFields([])->whereUuid('note');
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+    Route::get('/invoices/export.csv', [InvoiceController::class, 'export'])->name('invoices.export');
+    // Issue-only: modification verbs are explicitly refused.
+    Route::match(['put', 'patch', 'delete'], '/invoices/{invoice}', fn () => abort(405, 'Method Not Allowed'))
+        ->setBindingFields([])->whereUuid('invoice');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
