@@ -14,6 +14,8 @@ php artisan view:cache
 ```
 Non eseguire `config:cache` con un `.env` locale: la cache incorpora i valori, quindi usare quello di produzione.
 
+
+> Nota CI: se esegui i test in CI, lancia `npm run build` PRIMA di `php artisan test`. Lo SmokeTest renderizza la direttiva `@vite`, che richiede `public/build/manifest.json` (altrimenti `ViteManifestNotFoundException`).
 ## 2. Upload via FTP
 Carica **tutto il progetto** (inclusi `vendor/`, `public/build`, `.env`) in una cartella **fuori** dalla document root, es. `/careconnect/`.
 Escludi: `node_modules/`, `.git/`, `tests/`, `database/*.sqlite`, `storage/logs/*`.

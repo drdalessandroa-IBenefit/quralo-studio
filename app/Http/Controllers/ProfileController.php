@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -50,6 +51,9 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        // GDPR erasure: DB cascade removes signature rows, so remove the PNG blobs too.
+        Storage::disk('local')->deleteDirectory('signatures/'.$user->id);
 
         Auth::logout();
 

@@ -12,7 +12,7 @@ class FiscalCode implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! is_string($value) || ! preg_match(self::REGEX, $value)) {
-            $fail('The :attribute is not a valid Italian fiscal code.');
+            $fail('Il codice fiscale non è valido.');
         }
     }
 }
