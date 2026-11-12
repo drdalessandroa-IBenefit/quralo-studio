@@ -113,3 +113,25 @@ it('has no update or delete routes for signatures', function () {
         }
     }
 });
+
+it('closes the race: a stale unsigned copy cannot overwrite an existing signature', function () {
+    Storage::fake('local');
+    $t = User::factory()->create();
+    $p = Patient::factory()->for($t, 'therapist')->create();
+    $this->actingAs($t);
+    $stale = Patient::findOrFail($p->id); // both requests passed the "unsigned" check
+    $service = app(App\Services\SignatureService::class);
+
+    $service->store($p, sigPng(), true);
+    $first = $p->refresh()->signature_path;
+    $date = $p->consent_date;
+
+    expect(fn () => $service->store($stale, sigPng(), false))
+        ->toThrow(App\Services\SignatureAlreadyRecorded::class);
+
+    $p->refresh();
+    expect($p->signature_path)->toBe($first);
+    expect($p->consent_marketing)->toBeTrue();
+    expect($p->consent_date->equalTo($date))->toBeTrue();
+    expect(Storage::disk('local')->allFiles('signatures'))->toHaveCount(1);
+});

@@ -6,6 +6,7 @@ use App\Models\Patient;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
+use Throwable;
 
 class SignatureService
 {
@@ -25,15 +26,35 @@ class SignatureService
         $disk->put($path, $image->get());
 
         $now = now();
-        $patient->forceFill([
-            'consent_privacy' => true,
-            'consent_date' => $now,
-            'consent_text_version' => self::CONSENT_TEXT_VERSION,
-            'signature_path' => $path,
-            'consent_marketing' => $marketing,
-            'consent_marketing_date' => $marketing ? $now : null,
-        ])->save();
+        try {
+            // Atomic compare-and-set: only the first writer wins, even under concurrency.
+            $affected = Patient::whereKey($patient->getKey())->whereNull('signature_path')->update([
+                'consent_privacy' => true,
+                'consent_date' => $now,
+                'consent_text_version' => self::CONSENT_TEXT_VERSION,
+                'signature_path' => $path,
+                'consent_marketing' => $marketing,
+                'consent_marketing_date' => $marketing ? $now : null,
+                'updated_at' => $now,
+            ]);
+        } catch (Throwable $e) {
+            $disk->delete($path);
+            throw $e;
+        }
 
-        return $patient;
+        if ($affected === 0) {
+            $disk->delete($path);
+            throw new SignatureAlreadyRecorded;
+        }
+
+        return $patient->refresh();
+    }
+}
+
+class SignatureAlreadyRecorded extends RuntimeException
+{
+    public function __construct()
+    {
+        parent::__construct('Signature already recorded.');
     }
 }

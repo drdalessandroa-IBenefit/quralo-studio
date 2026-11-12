@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Services\SignatureAlreadyRecorded;
 use App\Services\SignatureService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,11 @@ class SignatureController extends Controller
         // Signatures are immutable proof: a signed patient cannot be re-signed.
         abort_if($patient->signature_path !== null, 409, 'Signature already recorded.');
 
-        $service->store($patient, $request->file('image'), (bool) ($data['consent_marketing'] ?? false));
+        try {
+            $service->store($patient, $request->file('image'), (bool) ($data['consent_marketing'] ?? false));
+        } catch (SignatureAlreadyRecorded) {
+            abort(409, 'Signature already recorded.');
+        }
 
         return redirect()->route('patients.show', $patient);
     }
