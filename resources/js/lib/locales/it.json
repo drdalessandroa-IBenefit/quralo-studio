@@ -203,5 +203,18 @@
     "signSaved": "Informativa firmata e salvata.",
     "signFailed": "Salvataggio della firma non riuscito.",
     "viewSignature": "Vedi firma"
+  },
+  "clinical": {
+    "new": "Nuova nota clinica",
+    "appendOnly": "Le note non si modificano: per correggere aggiungi una nuova nota.",
+    "choosePatient": "Scegli un paziente valido.",
+    "anamnesis": "Anamnesi",
+    "treatment_plan": "Piano di trattamento",
+    "session_notes": "Note di seduta",
+    "atLeastOne": "Compila almeno un campo.",
+    "save": "Salva nota",
+    "history": "Storico note",
+    "all": "Tutti i pazienti",
+    "empty": "Nessuna nota."
   }
 }

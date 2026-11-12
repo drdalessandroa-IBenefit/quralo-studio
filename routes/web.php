@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ClinicalNoteController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SignatureController;
@@ -35,6 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/agenda/export.ics', [AppointmentController::class, 'export'])->name('agenda.export');
     Route::get('/agenda/{appointment}/ics', [AppointmentController::class, 'exportOne'])->name('agenda.ics');
     Route::patch('/agenda/{appointment}/status', [AppointmentController::class, 'status'])->name('agenda.status');
+    Route::resource('clinical-notes', ClinicalNoteController::class)->only(['index', 'store']);
+    // Append-only record: modification verbs are explicitly refused (no controller action exists).
+    Route::match(['put', 'patch', 'delete'], '/clinical-notes/{note}', fn () => abort(405, 'Method Not Allowed'))
+        ->setBindingFields([])->whereUuid('note');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

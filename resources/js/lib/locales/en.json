@@ -203,5 +203,18 @@
     "signSaved": "Notice signed and saved.",
     "signFailed": "Could not save the signature.",
     "viewSignature": "View signature"
+  },
+  "clinical": {
+    "new": "New clinical note",
+    "appendOnly": "Notes cannot be edited: to correct one, add a new note.",
+    "choosePatient": "Choose a valid patient.",
+    "anamnesis": "Anamnesis",
+    "treatment_plan": "Treatment plan",
+    "session_notes": "Session notes",
+    "atLeastOne": "Fill in at least one field.",
+    "save": "Save note",
+    "history": "Note history",
+    "all": "All patients",
+    "empty": "No notes."
   }
 }

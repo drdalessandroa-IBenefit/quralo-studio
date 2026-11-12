@@ -6,6 +6,7 @@ use App\Models\Concerns\OwnedByTherapist;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
@@ -28,5 +29,10 @@ class Patient extends Model
             'consent_date' => 'datetime',
             'consent_marketing_date' => 'datetime',
         ];
+    }
+
+    public function clinicalNotes(): HasMany
+    {
+        return $this->hasMany(ClinicalNote::class);
     }
 }
