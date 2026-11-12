@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ClinicalNoteController;
+use App\Http\Controllers\GrowthController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
@@ -47,6 +48,9 @@ Route::middleware('auth')->group(function () {
     // Issue-only: modification verbs are explicitly refused.
     Route::match(['put', 'patch', 'delete'], '/invoices/{invoice}', fn () => abort(405, 'Method Not Allowed'))
         ->setBindingFields([])->whereUuid('invoice');
+    Route::get('/growth', [GrowthController::class, 'index'])->name('growth.index');
+    Route::post('/growth/events', [GrowthController::class, 'logEvent'])->name('growth.events');
+    Route::post('/growth/referral-codes', [GrowthController::class, 'generateCode'])->name('growth.referral');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
