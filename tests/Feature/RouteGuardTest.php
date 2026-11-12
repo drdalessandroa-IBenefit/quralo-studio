@@ -25,13 +25,18 @@ it('keeps landing, presale and auth pages public', function () {
     }
 });
 
-it('has no unauthenticated route beyond the public allowlist', function () {
-    $public = ['/', 'prevendita', 'login', 'register', 'forgot-password', 'reset-password/{token}', 'reset-password'];
+it('has no unauthenticated route beyond the exact public allowlist', function () {
+    $public = ['/', 'prevendita', 'login', 'register', 'forgot-password', 'reset-password/{token}', 'reset-password', 'up', 'sanctum/csrf-cookie'];
+    $checked = 0;
     foreach (app('router')->getRoutes() as $route) {
         $uri = $route->uri();
-        if (in_array($uri, $public, true) || str_starts_with($uri, 'up') || str_starts_with($uri, 'storage/') || str_starts_with($uri, 'verify-email') || $uri === 'email/verification-notification' || in_array($uri, ['logout', 'confirm-password', 'password', 'sanctum/csrf-cookie'], true)) {
+        if (in_array($uri, $public, true)) {
             continue;
         }
-        expect(in_array('auth', $route->gatherMiddleware(), true))->toBeTrue("route $uri lacks auth");
+        $guarded = collect($route->gatherMiddleware())
+            ->contains(fn ($m) => is_string($m) && str_starts_with($m, 'auth'));
+        expect($guarded)->toBeTrue("route $uri lacks auth middleware");
+        $checked++;
     }
+    expect($checked)->toBeGreaterThan(20);
 });

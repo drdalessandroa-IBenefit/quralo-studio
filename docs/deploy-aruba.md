@@ -27,17 +27,20 @@ Mai esporre `.env`, `storage/`, `app/`, `vendor/` via web.
 Parti da `.env.production.example`: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://...`, credenziali MySQL Aruba (host, database, utente, password dal pannello), `APP_KEY` generata, `APP_TIMEZONE=UTC`. Permessi file `.env`: 600/640 se possibile.
 
 ## 5. Migrazioni
-Opzione A (consigliata): in locale punta temporaneamente al DB Aruba (accesso remoto se abilitato) ed esegui `php artisan migrate --force`.
-Opzione B: genera lo schema SQL in locale (`php artisan schema:dump` su MySQL, oppure esporta da un DB locale MySQL migrato) e importalo da **phpMyAdmin** (Importa).
-Opzione C (ultima risorsa, shell assente): rotta one-shot protetta, da aggiungere temporaneamente, usare una sola volta e **rimuovere subito** (poi rieseguire `route:cache`):
+**Opzione B (consigliata, primaria): import SQL da phpMyAdmin.** In locale, su un DB MySQL vuoto, esegui `php artisan migrate --force` e poi esporta lo schema (phpMyAdmin -> Esporta, oppure `mysqldump --no-data`); importalo dal phpMyAdmin Aruba (Importa). Include le tabelle `sessions`, `cache`, `jobs`.
+Opzione A: se Aruba abilita l'accesso remoto a MySQL, punta temporaneamente `.env` locale al DB Aruba ed esegui `php artisan migrate --force`.
+**Opzione C (ultima risorsa, solo se non hai alternative):** rotta one-shot temporanea. Attenzione: con `SESSION_DRIVER=database` e `CACHE_STORE=database` su un DB vuoto la tabella `sessions` non esiste ancora, quindi il middleware di sessione darebbe errore 500 prima di eseguire la rotta. Due accorgimenti obbligatori:
+1. imposta temporaneamente nel `.env` di produzione `SESSION_DRIVER=file` e `CACHE_STORE=file` (e rigenera `config:cache`), poi **ripristina `database`** a migrazione conclusa;
+2. registra la rotta senza sessione:
 ```php
 Route::get('/_migrate/{token}', function (string $token) {
-    abort_unless(hash_equals(config('app.migrate_token', ''), $token) && config('app.migrate_token'), 404);
+    $expected = (string) env('MIGRATE_TOKEN', '');
+    abort_unless($expected !== '' && hash_equals($expected, $token), 404);
     Artisan::call('migrate', ['--force' => true]);
-    return '<pre>'.Artisan::output().'</pre>';
-});
+    return '<pre>'.e(Artisan::output()).'</pre>';
+})->withoutMiddleware([\Illuminate\Session\Middleware\StartSession::class]);
 ```
-con `MIGRATE_TOKEN` lungo e casuale in `.env` (mappato in `config/app.php`).
+`MIGRATE_TOKEN` lungo e casuale in `.env`. Nota: `env()` funziona solo con la config non in cache; se usi `config:cache` mappa il token in `config/app.php`. Dopo l'uso **rimuovi la rotta e il token**, ripristina i driver `database` e rigenera `route:cache`/`config:cache`.
 
 ## 6. Storage e firme (dati sanitari)
 - `storage/` e `bootstrap/cache/` devono essere scrivibili (chmod 775/755 via FTP).
