@@ -52,8 +52,8 @@ class InvoiceController extends Controller
     {
         $data = $request->validate([
             'patient_id' => ['required', 'uuid'],
-            'total_cents' => ['required', 'integer', 'min:1'],
-            'cash_cents' => ['required', 'integer', 'min:0'],
+            'total_cents' => ['required', 'integer', 'min:1', 'max:99999999'],
+            'cash_cents' => ['required', 'integer', 'min:0', 'max:99999999'],
             'allow_without_cf' => ['sometimes', 'boolean'],
         ]);
 

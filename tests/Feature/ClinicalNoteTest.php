@@ -63,3 +63,11 @@ it('lists only own notes and filters by patient', function () {
     $this->get('/clinical-notes?patient_id='.$p2->id)->assertInertia(fn ($p) => $p
         ->has('notes', 1)->where('notes.0.anamnesis', 'two'));
 });
+
+it('refuses to update or delete a note at model level', function () {
+    $note = ClinicalNote::create(['patient_id' => $this->patient->id, 'anamnesis' => 'orig']);
+    expect($note->update(['anamnesis' => 'changed']))->toBeFalse()
+        ->and($note->delete())->toBeFalse();
+    expect(ClinicalNote::count())->toBe(1)
+        ->and(ClinicalNote::first()->anamnesis)->toBe('orig');
+});

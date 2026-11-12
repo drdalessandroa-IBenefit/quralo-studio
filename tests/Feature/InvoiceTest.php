@@ -56,3 +56,12 @@ it('does not issue for another therapist\'s patient', function () {
 it('renders the invoices page', function () {
     $this->get('/invoices')->assertOk();
 });
+
+it('rejects absurd amounts with a validation error', function () {
+    $p = Patient::factory()->create(['fiscal_code' => 'RSSMRA80A01H501U']);
+    $this->post('/invoices', ['patient_id' => $p->id, 'total_cents' => 100000000, 'cash_cents' => 0])
+        ->assertSessionHasErrors('total_cents');
+    $this->post('/invoices', ['patient_id' => $p->id, 'total_cents' => 5000, 'cash_cents' => 100000000])
+        ->assertSessionHasErrors('cash_cents');
+    expect(Invoice::count())->toBe(0);
+});

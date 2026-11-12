@@ -16,6 +16,13 @@ class ClinicalNote extends Model
 
     protected $fillable = ['patient_id', 'anamnesis', 'treatment_plan', 'session_notes'];
 
+    /** Hard guarantee: a persisted note can never be updated or deleted through Eloquent. */
+    protected static function booted(): void
+    {
+        static::updating(fn () => false);
+        static::deleting(fn () => false);
+    }
+
     protected function casts(): array
     {
         return ['created_at' => 'datetime'];
