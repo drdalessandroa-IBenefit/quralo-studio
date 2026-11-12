@@ -22,7 +22,7 @@ trait OwnedByTherapist
 
             $id === null
                 ? $builder->whereRaw('1 = 0')
-                : $builder->where($table.'.therapist_id', $id);
+                : $builder->where(fn (Builder $q) => $q->where($table.'.therapist_id', $id));
         });
 
         static::creating(function ($model) {

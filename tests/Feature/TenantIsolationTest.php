@@ -66,3 +66,19 @@ it('casts tags to array', function () {
     $p = Patient::create(['first_name' => 'M', 'last_name' => 'R', 'tags' => ['ansia', 'adulto']]);
     expect($p->fresh()->tags)->toBe(['ansia', 'adulto']);
 });
+
+it('keeps the tenant constraint AND-combined when a consumer appends a top-level orWhere', function () {
+    $a = User::factory()->create();
+    $b = User::factory()->create();
+    $pa = Patient::factory()->for($a, 'therapist')->create(['first_name' => 'Anna', 'email' => 'anna@example.com']);
+    $this->actingAs($b);
+    Patient::factory()->for($b, 'therapist')->create(['first_name' => 'Bruno', 'email' => 'bruno@example.com']);
+
+    $results = Patient::where('first_name', 'like', '%Bruno%')
+        ->orWhere('email', 'like', '%anna@example.com%')
+        ->get();
+
+    expect($results->pluck('id')->all())->not->toContain($pa->id);
+    expect($results)->toHaveCount(1);
+    expect(Patient::where('first_name', 'zzz')->orWhere('id', $pa->id)->count())->toBe(0);
+});
