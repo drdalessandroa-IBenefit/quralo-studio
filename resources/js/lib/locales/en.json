@@ -156,5 +156,33 @@
     "googleUrl": "Google reviews link (https://...)",
     "save": "Save profile",
     "saved": "Profile saved."
+  },
+  "patients": {
+    "title": "Patients",
+    "description": "Records, privacy notice and marketing consent.",
+    "new": "New patient",
+    "searchLabel": "Search patient",
+    "searchPlaceholder": "Search by name, phone, fiscal code, tag...",
+    "noMatch": "No patient matches the search.",
+    "empty": "No patients yet. Add the first one!",
+    "colName": "Name",
+    "colContacts": "Contacts",
+    "colFiscalCode": "Fiscal code",
+    "colPrivacy": "Privacy notice",
+    "colMarketing": "Marketing",
+    "signed": "Signed",
+    "toSign": "To sign",
+    "marketingYes": "Consent given",
+    "marketingNo": "No consent",
+    "firstName": "First name *",
+    "lastName": "Last name *",
+    "email": "Email",
+    "phone": "Phone",
+    "fiscalCode": "Fiscal code",
+    "tags": "Tags (comma separated)",
+    "referral": "Referral code (optional)",
+    "save": "Save",
+    "detailTitle": "Patient record",
+    "backToList": "Back to patients"
   }
 }

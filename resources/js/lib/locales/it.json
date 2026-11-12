@@ -156,5 +156,33 @@
     "googleUrl": "Link recensioni Google (https://...)",
     "save": "Salva profilo",
     "saved": "Profilo salvato."
+  },
+  "patients": {
+    "title": "Pazienti",
+    "description": "Anagrafica, informativa privacy e consenso marketing.",
+    "new": "Nuovo paziente",
+    "searchLabel": "Cerca paziente",
+    "searchPlaceholder": "Cerca per nome, telefono, CF, tag...",
+    "noMatch": "Nessun paziente corrisponde alla ricerca.",
+    "empty": "Nessun paziente ancora. Aggiungi il primo!",
+    "colName": "Nome",
+    "colContacts": "Contatti",
+    "colFiscalCode": "Codice fiscale",
+    "colPrivacy": "Informativa",
+    "colMarketing": "Marketing",
+    "signed": "Firmata",
+    "toSign": "Da firmare",
+    "marketingYes": "Consenso sì",
+    "marketingNo": "Nessun consenso",
+    "firstName": "Nome *",
+    "lastName": "Cognome *",
+    "email": "Email",
+    "phone": "Telefono",
+    "fiscalCode": "Codice fiscale",
+    "tags": "Tag (separati da virgola)",
+    "referral": "Codice amico (facoltativo)",
+    "save": "Salva",
+    "detailTitle": "Scheda paziente",
+    "backToList": "Torna ai pazienti"
   }
 }

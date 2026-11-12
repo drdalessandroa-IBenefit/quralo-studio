@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudioController;
 use Illuminate\Foundation\Application;
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/studio', [StudioController::class, 'edit'])->name('studio.edit');
     Route::put('/studio', [StudioController::class, 'update'])->name('studio.update');
+    Route::resource('patients', PatientController::class)->only(['index', 'store', 'show']);
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
