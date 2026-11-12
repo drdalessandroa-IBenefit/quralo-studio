@@ -21,4 +21,9 @@ class PatientPolicy
     {
         return true;
     }
+
+    public function sign(User $user, Patient $patient): bool
+    {
+        return $patient->therapist_id === $user->id;
+    }
 }

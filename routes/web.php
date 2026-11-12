@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\StudioController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/studio', [StudioController::class, 'edit'])->name('studio.edit');
     Route::put('/studio', [StudioController::class, 'update'])->name('studio.update');
     Route::resource('patients', PatientController::class)->only(['index', 'store', 'show']);
+    Route::post('/patients/{patient}/signature', [SignatureController::class, 'store'])->name('patients.signature.store');
+    Route::get('/patients/{patient}/signature', [SignatureController::class, 'show'])->name('patients.signature.show');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

@@ -183,6 +183,25 @@
     "referral": "Referral code (optional)",
     "save": "Save",
     "detailTitle": "Patient record",
-    "backToList": "Back to patients"
+    "backToList": "Back to patients",
+    "sign": "Sign notice",
+    "signTitle": "Sign privacy notice",
+    "signVersion": "Text version {{version}}",
+    "privacyHeading": "Notice on personal data processing (arts. 13 and 14 EU Reg. 2016/679 – GDPR)",
+    "privacyP1": "The data controller, the healthcare professional of the practice, processes your personal data, including health data, solely for care purposes (assessment, treatment and follow-up) and for the administrative and tax management of services, including obligations towards the Tessera Sanitaria System.",
+    "privacyP2": "Data is retained for the period required by law, is not disseminated and may only be disclosed to parties required by law or to technical providers appointed as processors. You may at any time exercise your rights of access, rectification, erasure, restriction, portability and objection, and lodge a complaint with the data protection authority.",
+    "privacyP3": "By signing you declare that you have read this notice.",
+    "marketingOptional": "Optional.",
+    "marketingText": "I agree to receive WhatsApp reminders, check-up invitations and review requests. I can withdraw consent at any time, with no effect on my care.",
+    "padLabel": "Signature area",
+    "padHint": "Sign with your finger or a stylus",
+    "padCaptured": "Signature captured",
+    "padClear": "Clear",
+    "later": "Sign later",
+    "saveSignature": "Save signature",
+    "signRequired": "The patient's signature is required before saving.",
+    "signSaved": "Notice signed and saved.",
+    "signFailed": "Could not save the signature.",
+    "viewSignature": "View signature"
   }
 }

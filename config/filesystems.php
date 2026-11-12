@@ -33,7 +33,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            'serve' => false, // signatures must never be reachable via the /storage/{path} route
             'throw' => false,
             'report' => false,
         ],

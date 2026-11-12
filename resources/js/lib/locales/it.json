@@ -183,6 +183,25 @@
     "referral": "Codice amico (facoltativo)",
     "save": "Salva",
     "detailTitle": "Scheda paziente",
-    "backToList": "Torna ai pazienti"
+    "backToList": "Torna ai pazienti",
+    "sign": "Firma informativa",
+    "signTitle": "Firma informativa",
+    "signVersion": "Versione testo {{version}}",
+    "privacyHeading": "Informativa sul trattamento dei dati personali (artt. 13 e 14 Reg. UE 2016/679 – GDPR)",
+    "privacyP1": "Il titolare del trattamento, professionista sanitario dello studio, tratta i tuoi dati personali, inclusi i dati relativi alla salute, esclusivamente per finalità di cura (valutazione, trattamento e follow-up) e per la gestione amministrativa e fiscale delle prestazioni, compresi gli obblighi verso il Sistema Tessera Sanitaria.",
+    "privacyP2": "I dati sono conservati per il tempo previsto dalla legge, non sono diffusi e possono essere comunicati solo a soggetti obbligati per legge o a fornitori tecnici nominati responsabili. Puoi esercitare in ogni momento i diritti di accesso, rettifica, cancellazione, limitazione, portabilità e opposizione, e proporre reclamo al Garante per la protezione dei dati personali.",
+    "privacyP3": "Firmando dichiari di aver preso visione della presente informativa.",
+    "marketingOptional": "Facoltativo.",
+    "marketingText": "Acconsento a ricevere messaggi WhatsApp di promemoria, inviti a controlli e richieste di recensione. Posso revocare il consenso in qualsiasi momento, senza alcuna conseguenza sulle cure.",
+    "padLabel": "Area di firma",
+    "padHint": "Firma con il dito o con la penna",
+    "padCaptured": "Firma acquisita",
+    "padClear": "Pulisci",
+    "later": "Firma più tardi",
+    "saveSignature": "Salva firma",
+    "signRequired": "Serve la firma del paziente prima di salvare.",
+    "signSaved": "Informativa firmata e salvata.",
+    "signFailed": "Salvataggio della firma non riuscito.",
+    "viewSignature": "Vedi firma"
   }
 }

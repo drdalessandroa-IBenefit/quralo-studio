@@ -1,12 +1,15 @@
 import { Badge } from '@/Components/ui/badge';
+import { SignatureDialog } from '@/Components/SignatureDialog';
 import { Button } from '@/Components/ui/button';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PatientRow } from './Index';
 
 export default function Show({ patient }: { patient: PatientRow }) {
     const { t } = useTranslation();
+    const [signing, setSigning] = useState(false);
     const name = `${patient.first_name} ${patient.last_name}`;
 
     return (
@@ -47,7 +50,23 @@ export default function Show({ patient }: { patient: PatientRow }) {
                     </div>
                     <div>
                         <dt className="text-muted-foreground">{t('patients.colPrivacy')}</dt>
-                        <dd>{patient.privacy_signed ? t('patients.signed') : t('patients.toSign')}</dd>
+                        <dd className="flex flex-wrap items-center gap-2">
+                            {patient.privacy_signed ? t('patients.signed') : t('patients.toSign')}
+                            {patient.privacy_signed ? (
+                                <a
+                                    href={`/patients/${patient.id}/signature`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-primary underline"
+                                >
+                                    {t('patients.viewSignature')}
+                                </a>
+                            ) : (
+                                <Button size="sm" onClick={() => setSigning(true)}>
+                                    {t('patients.sign')}
+                                </Button>
+                            )}
+                        </dd>
                     </div>
                     <div>
                         <dt className="text-muted-foreground">{t('patients.colMarketing')}</dt>
@@ -55,6 +74,14 @@ export default function Show({ patient }: { patient: PatientRow }) {
                     </div>
                 </dl>
             </div>
+            {!patient.privacy_signed && (
+                <SignatureDialog
+                    patientId={patient.id}
+                    patientName={name}
+                    open={signing}
+                    onClose={() => setSigning(false)}
+                />
+            )}
         </AuthenticatedLayout>
     );
 }
