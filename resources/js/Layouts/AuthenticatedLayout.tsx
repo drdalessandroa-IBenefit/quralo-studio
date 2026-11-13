@@ -26,12 +26,48 @@ export default function Authenticated({
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div className="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route('dashboard')}
                                     active={route().current('dashboard')}
                                 >
-                                    Dashboard
+                                    Oggi
+                                </NavLink>
+                                <NavLink
+                                    href={route('patients.index')}
+                                    active={route().current('patients.*')}
+                                >
+                                    Pazienti
+                                </NavLink>
+                                <NavLink
+                                    href={route('agenda.index')}
+                                    active={route().current('agenda.*')}
+                                >
+                                    Agenda
+                                </NavLink>
+                                <NavLink
+                                    href={route('clinical-notes.index')}
+                                    active={route().current('clinical-notes.*')}
+                                >
+                                    Cartella
+                                </NavLink>
+                                <NavLink
+                                    href={route('invoices.index')}
+                                    active={route().current('invoices.*')}
+                                >
+                                    Fatture
+                                </NavLink>
+                                <NavLink
+                                    href={route('growth.index')}
+                                    active={route().current('growth.*')}
+                                >
+                                    Growth
+                                </NavLink>
+                                <NavLink
+                                    href={route('studio.edit')}
+                                    active={route().current('studio.*')}
+                                >
+                                    Studio
                                 </NavLink>
                             </div>
                         </div>
@@ -135,7 +171,43 @@ export default function Authenticated({
                             href={route('dashboard')}
                             active={route().current('dashboard')}
                         >
-                            Dashboard
+                            Oggi
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('patients.index')}
+                            active={route().current('patients.*')}
+                        >
+                            Pazienti
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('agenda.index')}
+                            active={route().current('agenda.*')}
+                        >
+                            Agenda
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('clinical-notes.index')}
+                            active={route().current('clinical-notes.*')}
+                        >
+                            Cartella
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('invoices.index')}
+                            active={route().current('invoices.*')}
+                        >
+                            Fatture
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('growth.index')}
+                            active={route().current('growth.*')}
+                        >
+                            Growth
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('studio.edit')}
+                            active={route().current('studio.*')}
+                        >
+                            Studio
                         </ResponsiveNavLink>
                     </div>
 

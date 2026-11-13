@@ -11,6 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Fidati dei proxy (Cloudflare Tunnel, Aruba, ecc.): fa rilevare a
+        // Laravel lo schema https tramite X-Forwarded-Proto, evitando URL
+        // http dietro un tunnel/reverse-proxy https ("mixed content").
+        $middleware->trustProxies(at: '*');
+
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
