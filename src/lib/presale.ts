@@ -1,3 +1,0 @@
-import { z } from "zod";
-export const PRESALE_CONFIG: {priceCents:number|null;availablePlaces:number|null;endDate:string|null;guarantee:string|null}={priceCents:null,availablePlaces:null,endDate:null,guarantee:null};
-export const presaleSchema=z.object({first_name:z.string().trim().min(1).max(100),last_name:z.string().trim().min(1).max(100),email:z.string().trim().email().max(255),phone:z.string().trim().max(30).refine(v=>v===""||/^\+?[0-9 ()-]{6,30}$/.test(v)),profession:z.enum(["osteopath","kinesiologist","physiotherapist","other"]),consent_privacy:z.literal(true),honeypot:z.string().max(0)});

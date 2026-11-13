@@ -1,90 +1,66 @@
-# CareConnect
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-SaaS verticale per **terapisti manuali** (osteopati, chinesiologi, fisioterapisti).
-Non un gestionale passivo: un *Client Acquisition & Retention Engine* che riempie
-l'agenda e aumenta il valore del paziente, oltre a gestire clinica e burocrazia.
-Interfaccia in italiano, mobile-first (tablet e smartphone in studio).
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Stack
+## About Laravel
 
-- **React 19** + **TanStack Start** (SSR) + **Vite**
-- **Tailwind CSS v4** + **shadcn/ui** (Radix) — design system teal in `src/styles.css`
-- **Supabase** (PostgreSQL, Auth, Storage) con Row Level Security
-- **i18next** (it / en / es / fr)
-- Test con **Vitest**
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-## Funzionalità (8 moduli)
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-| Modulo | Cosa fa |
-|---|---|
-| **Oggi** | Dashboard: appuntamenti del giorno + pazienti da ricontattare |
-| **Pazienti + Firma** | Anagrafica, validazione codice fiscale IT, firma touch del consenso GDPR salvata come prova immutabile |
-| **Agenda** | Prenotazioni con anti-sovrapposizione a livello DB, stati completato/no-show/annullato |
-| **Cartella clinica** | Anamnesi, piano di trattamento, note di seduta (solo append) |
-| **Fatture + TS** | Numerazione atomica, importi in centesimi, marca da bollo >77,47€, export CSV mensile |
-| **Growth engine** | Riattivazione dormienti, recensioni Google, passaparola, campagne — messaggi WhatsApp inviati a mano dal terapista |
-| **Studio** | Profilo professionista (CF, P.IVA, link recensioni) |
-| **Leads / Prevendita** | Landing pubblica + raccolta lead |
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Sviluppo
+## Learning Laravel
 
-Serve **Node.js** (o **Bun**).
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-```bash
-# dipendenze
-npm install            # con bun: bun install
-# oppure, se npm segnala conflitti di peer-deps preesistenti:
-npm install --legacy-peer-deps
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-# variabili d'ambiente
-cp .env.example .env   # poi inserisci i valori Supabase
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-# avvio in sviluppo
-npm run dev            # http://localhost:3000
-```
+## Laravel Sponsors
 
-### Script
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-| Comando | Azione |
-|---|---|
-| `npm run dev` | server di sviluppo |
-| `npm run build` | build di produzione (Nitro) |
-| `npm run preview` | anteprima della build |
-| `npm test` | test (Vitest) |
-| `npm run lint` | ESLint |
+### Premium Partners
 
-## Variabili d'ambiente
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[WebReinvent](https://webreinvent.com/)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Jump24](https://jump24.co.uk)**
+- **[Redberry](https://redberry.international/laravel/)**
+- **[Active Logic](https://activelogic.com)**
+- **[byte5](https://byte5.de)**
+- **[OP.GG](https://op.gg)**
 
-Vedi `.env.example`. Le chiavi `VITE_*` sono esposte al browser (URL e chiave
-*publishable*, pensate per essere pubbliche); le altre sono solo lato server.
+## Contributing
 
-| Variabile | Uso |
-|---|---|
-| `VITE_SUPABASE_URL` / `SUPABASE_URL` | endpoint del progetto Supabase |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` / `SUPABASE_PUBLISHABLE_KEY` | chiave pubblica |
-| `SUPABASE_SERVICE_ROLE_KEY` | chiave service-role (solo server) |
-| `DATABASE_MIGRATION_URL` | stringa di connessione Postgres per le migrazioni Drizzle |
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Database e sicurezza
+## Code of Conduct
 
-Lo schema completo è in [`drizzle/migrations/`](drizzle/migrations/). Regole non
-negoziabili (dati sanitari, GDPR):
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-1. **Row Level Security** su tutte le tabelle, isolamento per terapista (`auth.uid()`).
-2. Il client non invia mai `therapist_id`: lo imposta il database (`default auth.uid()`).
-3. Importi sempre interi in **centesimi**.
-4. Le fatture si emettono solo via la funzione SQL `issue_invoice` (numerazione
-   progressiva atomica per anno); il client non può inserire/modificare/cancellare fatture.
-5. Note cliniche **append-only** (nessun update/delete): le correzioni sono nuove note.
-6. Bucket storage `signatures` privato, cartella = `auth.uid()`, nessun update/delete
-   (la firma è una prova immutabile).
+## Security Vulnerabilities
 
-## Deployment
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-La build usa **Nitro**: il preset di default è `node-server`. Per altri target:
+## License
 
-```bash
-NITRO_PRESET=node-server npm run build   # oppure vercel, cloudflare, ecc.
-```
-
-L'output è in `.output/` (`node .output/server/index.mjs` per il preset node).
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
